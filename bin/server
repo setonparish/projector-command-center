@@ -1,0 +1,2 @@
+#!/bin/sh
+eval "(cd "$(dirname "$0")/.." && rackup -p 3000)"

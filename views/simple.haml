@@ -1,0 +1,12 @@
+%h3 Projector Control
+
+- if @broadcaster.any?(:powered_on?) || @broadcaster.any?(:warming_up?)
+  %form(action="/power_off" method="post")
+    %input(type="submit" value="Power Off")
+- else
+  %form(action="/power_on" method="post")
+    %input(type="submit" value="Power On")
+
+%footer
+  %p== Number of projectors: #{@broadcaster.projectors.size}
+  %a(href="/") Refresh

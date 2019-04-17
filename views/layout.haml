@@ -1,0 +1,7 @@
+%html
+  %head
+    %title Projector Command Center
+    - if @meta_refresh_interval
+      %meta{ "http-equiv": "refresh", "content": @meta_refresh_interval }
+  %body
+    = yield
