@@ -4,5 +4,6 @@
 /test/tmp/
 /test/version_tmp/
 /tmp/
+/projector_addresses.yml
 
 .rvmrc
