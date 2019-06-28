@@ -4,7 +4,7 @@ require 'yaml'
 class CommandCenter < Sinatra::Application
   configure do
     Projectify.configure do |config|
-      addresses = YAML.load_file("projector_addresses.yml") || begin
+      addresses = YAML.load_file("config/projector_addresses.yml") || begin
         puts "WARNING: No projector addresses were found in `projector_addresses.yml`.  Add all projector IP or local addresses in this file."
         addresses = []
       end
