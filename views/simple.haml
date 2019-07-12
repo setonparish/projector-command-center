@@ -1,12 +1,21 @@
-%h3 Projector Control
+%section.container.row.center
+  .container.column
+    %h2 Power
+    .description Turn power on and off for all projectors
 
-- if @broadcaster.any?(:powered_on?) || @broadcaster.any?(:warming_up?)
-  %form(action="/power_off" method="post")
-    %input(type="submit" value="Power Off")
-- else
-  %form(action="/power_on" method="post")
-    %input(type="submit" value="Power On")
+  %label.toggle(for="checkbox")
+    %input(type="checkbox" id="checkbox")
+    .slider.round
 
-%footer
-  %p== Number of projectors: #{@broadcaster.projectors.size}
-  %a(href="/") Refresh
+  -# - if @broadcaster.any?(:powered_on?) || @broadcaster.any?(:warming_up?)
+  -#   %form(action="/power_off" method="post")
+  -#     %input(type="submit" value="Power Off")
+  -# - else
+  -#   %form(action="/power_on" method="post")
+  -#     %input(type="submit" value="Power On")
+
+%footer.container.row.center
+  %dl
+    %dt Controlled Projectors
+    %dd.bubble= @broadcaster.projectors.size
+  %a.btn.outline(href="/") Refresh
