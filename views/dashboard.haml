@@ -1,0 +1,13 @@
+%section.container.row.center
+  .container.column
+    %h2 Power
+    .description Turn power on and off for all projectors
+  %label.toggle(for = "power-checkbox")
+    %input{ type: "checkbox", id: "power-checkbox", checked: @powered_on, data: { "checked": "power_on", "unchecked": "power_off" } }
+    .slider.round
+
+%footer.container.row.center
+  %dl
+    %dt Controlled Projectors
+    %dd.bubble= @number_projectors
+  %a.btn.outline(href="/") Refresh

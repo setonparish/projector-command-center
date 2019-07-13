@@ -13,20 +13,22 @@ class CommandCenter < Sinatra::Application
   end
 
   get '/' do
-    @broadcaster = Projectify::Broadcaster.new
-    if @broadcaster.any?(:power_transitioning?)
+    broadcaster = Projectify::Broadcaster.new
+
+    @powered_on = !!(broadcaster.any?(:powered_on?) || broadcaster.any?(:warming_up?))
+    @number_projectors = broadcaster.projectors.size
+    if broadcaster.any?(:power_transitioning?)
       @meta_refresh_interval = 2 #seconds
     end
-    haml :simple
+
+    haml :dashboard
   end
 
   post '/power_on' do
     Projectify::Broadcaster.new.call(:power_on)
-    redirect '/'
   end
 
   post '/power_off' do
     Projectify::Broadcaster.new.call(:power_off)
-    redirect '/'
   end
 end
