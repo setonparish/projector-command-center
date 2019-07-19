@@ -12,15 +12,10 @@ class CommandCenter < Sinatra::Application
     end
   end
 
+
   get '/' do
-    broadcaster = Projectify::Broadcaster.new
-
-    @powered_on = !!(broadcaster.any?(:powered_on?) || broadcaster.any?(:warming_up?))
+    @powered_on = powered_on
     @number_projectors = broadcaster.projectors.size
-    if broadcaster.any?(:power_transitioning?)
-      @meta_refresh_interval = 2 #seconds
-    end
-
     haml :dashboard
   end
 
@@ -31,4 +26,25 @@ class CommandCenter < Sinatra::Application
   post '/power_off' do
     Projectify::Broadcaster.new.call(:power_off)
   end
+
+  get '/stream', provides: 'text/event-stream' do
+    stream :keep_open do |out|
+      EM.add_periodic_timer(3) do
+        data = { powered_on: powered_on }
+        out << "data: #{data.to_json}\n\n"
+      end
+    end
+  end
+
+
+  private
+
+  def broadcaster
+    @broadcaster ||= Projectify::Broadcaster.new
+  end
+
+  def powered_on
+    !!(broadcaster.any?(:powered_on?) || broadcaster.any?(:warming_up?))
+  end
+
 end
