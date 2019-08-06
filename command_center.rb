@@ -14,7 +14,8 @@ class CommandCenter < Sinatra::Application
 
 
   get '/' do
-    @powered_on = powered_on
+    @powered_on = powered_on?
+    @shutter_open = shutter_open?
     @number_projectors = broadcaster.projectors.size
     haml :dashboard
   end
@@ -27,10 +28,21 @@ class CommandCenter < Sinatra::Application
     Projectify::Broadcaster.new.call(:power_off)
   end
 
+  post '/shutter_open' do
+    Projectify::Broadcaster.new.call(:shutter_open)
+  end
+
+  post '/shutter_close' do
+    Projectify::Broadcaster.new.call(:shutter_close)
+  end
+
   get '/stream', provides: 'text/event-stream' do
     stream :keep_open do |out|
       EM.add_periodic_timer(3) do
-        data = { powered_on: powered_on }
+        data = {
+          powered_on: powered_on?,
+          shutter_open: shutter_open?,
+        }
         out << "data: #{data.to_json}\n\n"
       end
     end
@@ -43,8 +55,12 @@ class CommandCenter < Sinatra::Application
     @broadcaster ||= Projectify::Broadcaster.new
   end
 
-  def powered_on
-    !!(broadcaster.any?(:powered_on?) || broadcaster.any?(:warming_up?))
+  def powered_on?
+    !!(broadcaster.all?(:powered_on?) || broadcaster.any?(:busy?) || broadcaster.any?(:warming_up?))
+  end
+
+  def shutter_open?
+    !!(broadcaster.all?(:shutter_open?) && powered_on?)
   end
 
 end

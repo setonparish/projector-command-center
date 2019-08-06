@@ -2,7 +2,8 @@
   Toggle button lookups
 */
 let radioButtons = {
-  "power": "power-checkbox"
+  "power": "power-checkbox",
+  "shutter": "shutter-checkbox",
 }
 
 function getRadio(id) {
@@ -16,6 +17,9 @@ function getRadio(id) {
 document.addEventListener("DOMContentLoaded", function (event) {
   power = getRadio("power");
   power.addEventListener("change", sendProjectorState);
+
+  shutter = getRadio("shutter");
+  shutter.addEventListener("change", sendProjectorState);
 
   // listen to sse stream from server to update toggles
   stream('/stream');
@@ -45,6 +49,9 @@ function call(url) {
 function refreshProjector(data) {
   power = getRadio("power");
   power.checked = data.powered_on;
+
+  shutter = getRadio("shutter");
+  shutter.checked = data.powered_on && data.shutter_open;
 }
 
 function stream(url) {

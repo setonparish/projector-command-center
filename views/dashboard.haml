@@ -6,6 +6,14 @@
     %input{ type: "checkbox", id: "power-checkbox", checked: @powered_on, data: { "checked": "power_on", "unchecked": "power_off" } }
     .slider.round
 
+%section.container.row.center
+  .container.column
+    %h2 Lens
+    .description Turn lens on and off for all projectors
+  %label.toggle(for = "shutter-checkbox")
+    %input{ type: "checkbox", id: "shutter-checkbox", checked: @shutter_open, data: { "checked": "shutter_open", "unchecked": "shutter_close" } }
+    .slider.round
+
 %footer.container.row.center
   %dl
     %dt Controlled Projectors
